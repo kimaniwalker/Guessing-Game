@@ -5,6 +5,7 @@ import {
 import CustomButton from '../components/button'
 import Layout from '../components/layout'
 import Container from '../components/container'
+import Row from '../components/row'
 
 
 export default function Start({ onConfirmNumber, setNumber }) {
@@ -37,23 +38,22 @@ export default function Start({ onConfirmNumber, setNumber }) {
         <>
 
             <Layout>
+                <Container style={{ marginTop: 0, marginBottom: 20 }}>
+                    <Text style={styles.instructionText}>Guessing Guru</Text>
+                </Container>
 
                 <Container style={{ marginTop: 0, paddingVertical: 50 }}>
                     <TextInput value={userinput} onChangeText={setUserinput} style={styles.numberInput} maxLength={2} keyboardType="number-pad" />
 
-                    <View style={styles.row}>
+                    <Row>
                         <Text style={styles.instructionText}>Choose A Number Between 0 & 99</Text>
-                    </View>
-
-                    <View style={styles.row}>
+                    </Row>
+                    <Row>
                         <CustomButton style={styles.Button} onPress={confirmInput}>Reset</CustomButton>
                         <CustomButton style={styles.Button} onPress={confirmInput}>Start</CustomButton>
-                    </View>
+                    </Row>
 
                 </Container>
-
-
-
 
             </Layout>
 

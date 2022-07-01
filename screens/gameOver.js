@@ -1,99 +1,62 @@
 import React from 'react'
 import {
-    TextInput, Text, View, Button, StyleSheet, ImageBackground, Alert, ScrollView
+    TextInput, Text, View, Button, StyleSheet, ImageBackground, Alert, ScrollView, useWindowDimensions
 } from 'react-native'
 import CustomButton from '../components/button'
 import { LinearGradient } from 'expo-linear-gradient'
 import Start from './start'
+import Layout from '../components/layout'
+import Container from '../components/container'
+import Row from '../components/row'
 
 
 export default function GameOver({ logs, setNumber, number, setLogs }) {
-
-
-
+    const { height } = useWindowDimensions()
+    const MarginTopDistance = height < 480 ? 25 : 40
 
     if (!number) return <Start setNumber={setNumber} />
 
     return (
         <>
-            <LinearGradient colors={['#3B91CC', '#3BCC9F']} style={styles.wrapper} >
-                <ImageBackground style={styles.wrapper} source={require('../assets/background.png')} resizeMode={'cover'}
-                    imageStyle={styles.image}>
+            <Layout>
+                <Container style={{ marginTop: 0 }}>
+                    <Text style={styles.score}>Game Over</Text>
+                    <Row>
 
+                        <Text style={styles.logText}>Your Number was {number} </Text>
+                    </Row>
+                </Container>
 
-                    <View style={styles.container}>
-                        <Text style={styles.score}>Game Over</Text>
-                        <View style={styles.row}>
-                            <Text>Your Number was {number} </Text>
-                        </View>
+                <Container style={{ marginTop: MarginTopDistance }}>
+                    <Row>
+                        <CustomButton onPress={() => {
+                            setLogs([])
+                            setNumber(null)
+                        }}>
+                            Play Again
+                        </CustomButton>
 
-                    </View>
-                    <View style={styles.container}>
-                        <View style={styles.row}>
-
-
-                            <CustomButton onPress={() => {
-                                setLogs([])
-                                setNumber(null)
-                            }}>
-                                Play Again
-                            </CustomButton>
-                        </View>
-                        <ScrollView>
-                            <Text>It took the computer {logs.length} tries to guess your number correctly.</Text>
-                        </ScrollView>
-                    </View>
-                </ImageBackground>
-
-            </LinearGradient>
+                    </Row>
+                    <Text style={styles.logText}>It took the computer {logs.length} tries to guess your number correctly.</Text>
+                </Container>
+            </Layout>
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#3B91CC',
-        marginTop: 100,
-        marginHorizontal: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-        shadowColor: 'lightgray',
-        shadowOffset: { width: 2, height: 2 },
-        shadowRadius: 9,
-        shadowOpacity: 1,
-        padding: 16
-    },
-    wrapper: {
-        flex: 1
-    },
-    image: {
-        opacity: .45
-    },
+
+
     score: {
         fontSize: 32,
-        marginVertical: 10
+        marginVertical: 10,
+        fontFamily: 'poppins'
     },
-    numberInput: {
-        borderBottomColor: 'yellow',
-        borderRadius: 8,
-        borderColor: 'white',
-        height: 78,
-        padding: 16,
-        fontSize: 32,
+    logText: {
         textAlign: 'center',
-        backgroundColor: 'white',
-        width: 120,
-    },
-    row: {
-        marginVertical: 20,
-        flexDirection: 'row',
-        width: '100%',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
+        fontSize: 16
     }
+
 })
 
 

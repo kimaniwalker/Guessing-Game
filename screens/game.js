@@ -1,10 +1,13 @@
 import React from 'react'
 import {
-    TextInput, Text, View, Button, StyleSheet, ImageBackground, Alert, ScrollView
+    Text, StyleSheet, Alert, ScrollView, useWindowDimensions
 } from 'react-native'
 import CustomButton from '../components/button'
-import { LinearGradient } from 'expo-linear-gradient'
 import GameOver from './gameOver'
+import Layout from '../components/layout'
+import Container from '../components/container'
+import Row from '../components/row'
+import { AntDesign } from '@expo/vector-icons';
 
 
 function generateRandomBetween(min, max, exclude) {
@@ -25,6 +28,11 @@ export default function Game({ number, logs, setNumber, setLogs }) {
     const initialGuess = generateRandomBetween(1, 100, number);
     const [currentGuess, setCurrentGuess] = React.useState(initialGuess);
     const [gameOver, setGameOver] = React.useState(false)
+
+    const { width, height } = useWindowDimensions()
+    const MarginTopDistance = height < 480 ? 25 : 0
+    const ContainerHeight = height < 480 ? null : '50%'
+
 
     React.useEffect(() => {
         if (currentGuess == number) {
@@ -64,100 +72,59 @@ export default function Game({ number, logs, setNumber, setLogs }) {
         setCurrentGuess(newRndNumber);
         logs.push(`Is your number ${newRndNumber} ?`)
 
-        console.log(newRndNumber)
-        console.log(number)
-
     }
 
     if (gameOver) return <GameOver logs={logs} setNumber={setNumber} number={number} setLogs={setLogs} />
 
     return (
         <>
-            <LinearGradient colors={['#3B91CC', '#3BCC9F']} style={styles.wrapper} >
-                <ImageBackground style={styles.wrapper} source={require('../assets/background.png')} resizeMode={'cover'}
-                    imageStyle={styles.image}>
 
+            <Layout>
+                <Container style={{ marginTop: MarginTopDistance, height: ContainerHeight, backgroundColor: 'transparent', marginHorizontal: 0, padding: 0 }}>
 
-                    <View style={styles.container}>
-                        <Text style={styles.score}>{currentGuess}</Text>
-                        <View style={styles.row}>
-                            <CustomButton onPress={nextGuessHandler.bind(this, 'higher')} >+</CustomButton>
-                            <CustomButton onPress={nextGuessHandler.bind(this, 'lower')} >-</CustomButton>
-                        </View>
+                    <Container style={{ marginTop: 0 }}>
+                        <Text style={styles.score}>Is Your Number {currentGuess} ?</Text>
+                        <Row>
 
-                    </View>
-                    <View style={styles.container}>
-                        <View style={styles.row}>
-
-
-                            <CustomButton>
-                                Try Again
+                            <CustomButton onPress={nextGuessHandler.bind(this, 'higher')} >
+                                <AntDesign name="plus" size={24} color="black" />
                             </CustomButton>
-                        </View>
-                        <ScrollView>
-                            {logs && (
-                                logs.map((item) => (
+                            <CustomButton onPress={nextGuessHandler.bind(this, 'lower')} >
+                                <AntDesign name="minus" size={24} color="black" />
+                            </CustomButton>
+                        </Row>
+                    </Container>
+                </Container>
 
-                                    <View key={item} style={styles.row}>
+                <ScrollView style={styles.scrollView}>
+                    {logs && (
+                        logs.map((item) => (
+                            <Container key={item} style={{ marginTop: 20, marginVerticle: 5 }}>
+                                <Text style={styles.logItem}>{item}</Text>
+                            </Container>
+                        ))
+                    )}
 
-                                        <Text>{item}</Text>
-
-                                    </View>
-                                ))
-                            )}
-                        </ScrollView>
-                    </View>
-                </ImageBackground>
-
-            </LinearGradient>
+                </ScrollView>
+            </Layout>
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#3B91CC',
-        marginTop: 100,
-        marginHorizontal: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-        shadowColor: 'lightgray',
-        shadowOffset: { width: 2, height: 2 },
-        shadowRadius: 9,
-        shadowOpacity: 1,
-        padding: 16
-    },
-    wrapper: {
-        flex: 1
-    },
-    image: {
-        opacity: .45
-    },
+
     score: {
         fontSize: 32,
-        marginVertical: 10
+        fontFamily: 'poppins',
+        textAlign: 'center'
     },
-    numberInput: {
-        borderBottomColor: 'yellow',
-        borderRadius: 8,
-        borderColor: 'white',
-        height: 78,
-        padding: 16,
-        fontSize: 32,
-        textAlign: 'center',
-        backgroundColor: 'white',
-        width: 120,
+    scrollView: {
+        marginTop: 5,
     },
-    row: {
-        marginVertical: 20,
-        flexDirection: 'row',
-        width: '100%',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
+    logItem: {
+        fontSize: 18
     }
+
 })
 
 
